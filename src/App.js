@@ -47,6 +47,11 @@ function App() {
       setProvider(provider);
       const signer = provider.getSigner();
       setSigner(signer)
+      const chain = await signer.getChainId();
+      if (chain !== 11155111) {
+        alert("Please switch to Sepolia")
+        return
+      }
       await signer.signMessage("Welcome to ETH-RPG");
       setSigner(signer)
       const address = signer.getAddress();
