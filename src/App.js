@@ -131,7 +131,7 @@ function App() {
     console.log('Defense: ' + character.defense.toString())
     console.log('Exp: ' + character.experience.toString())
     console.log('Strength: ' + character.strength.toString())
-    if (character.health.toString === "0") {
+    if (character.health.toString() === "0") {
       setCharacterLevel("0");
       setCharacterHealth("DEAD!");
       setCharacterExp("0");
