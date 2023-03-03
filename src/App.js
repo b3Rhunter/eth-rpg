@@ -34,7 +34,7 @@ function App() {
   const [showQuest, setShowQuests] = useState(false);
   const [createQuestModal, setCreateQuestModal] = useState(false)
 
-  const contractAddress = "0xEb8dCa2280c9ed696A74b5A3C1C988eC859FA39C";
+  const contractAddress = "0x25EA38338c6cB5aD2Fbe92980abff3d19bD239aC";
 
   const connect = async () => {
     try {
