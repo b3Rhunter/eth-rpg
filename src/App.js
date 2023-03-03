@@ -232,7 +232,7 @@ function App() {
 
             {showQuest && (
               <div className='questList hideScroll'>
-                <button onClick={closeQuests}>X</button>
+                <button className='questListBtn' onClick={closeQuests}>X</button>
                 <h4>Quests</h4>
                 {questName.length > 0 ? (
                   questName.map((name, i) => (
