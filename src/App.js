@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { ethers } from "ethers";
 import abi from './abi.json';
+import erc20 from './erc20abi.json';
 
 function App() {
 
@@ -36,7 +37,8 @@ function App() {
 
   const [pestControl, setPestControl] = useState(false);
 
-  const contractAddress = "0x4b17aC4E09322Df3dB03f95bBE416ecef4b65c93";
+  const contractAddress = "0x7C9795a09c8d915fE07D930d694bcC1Eff45ac8C";
+  const erc20Address = "0xC52249b679517876Fa8c77d1659E5F730c6E453d"
 
   const connect = async () => {
     try {
@@ -128,6 +130,7 @@ function App() {
 
   async function startQuest(questIndex) {
     try {
+      openQuest()
       const tx = await contract.startQuest(questIndex);
       const receipt = await tx.wait();
       console.log(receipt)
@@ -148,7 +151,7 @@ function App() {
         setCharacterHealth(character.health.toString());
         setCharacterExp(character.experience.toString());
         setCharacterStrg(character.strength.toString());
-        setCharacterDef(character.defense.toString())
+        setCharacterDef(character.defense.toString());
       }
     } catch (error) {
       console.log(error.message)
@@ -181,6 +184,14 @@ function App() {
 
   async function buryCharacter() {
     try {
+      const user = signer.getAddress()
+      const address = erc20Address;
+      const rpgAddress = "0x7C9795a09c8d915fE07D930d694bcC1Eff45ac8C";
+      const erc20Contract = new ethers.Contract(address, erc20, signer);
+      const balance = await erc20Contract.balanceOf(user);
+      const approve = await erc20Contract.approve(rpgAddress, balance);
+      const tx1 = await approve.wait()
+      console.log(tx1)
       const tx = await contract.bury();
       const receipt = await tx.wait();
       console.log(receipt)
@@ -273,9 +284,6 @@ function App() {
                         <p>Difficulty: {questDiff[i]}</p>
                         <p>Reward: {questReward[i]}</p>
                         <div className='startBtn' onClick={() => startQuest(i)}>Start Quest</div>
-                        {!pestControl && (
-                          <button style={{fontFamily: "monospace", fontSize: "14px", position: "relative", top: "0px"}} onClick={openQuest}>show quest</button>
-                        )}
                       </div>
                     </div>
                   ))

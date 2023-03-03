@@ -267,6 +267,19 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "experience",
+                "type": "uint256"
+            }
+        ],
+        "name": "claimTokens",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "string",
                 "name": "_name",
                 "type": "string"
@@ -524,6 +537,19 @@
     {
         "inputs": [
             {
+                "internalType": "contract TestToken",
+                "name": "_testToken",
+                "type": "address"
+            }
+        ],
+        "name": "setTestTokenAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_questIndex",
                 "type": "uint256"
@@ -561,6 +587,19 @@
                 "internalType": "string",
                 "name": "",
                 "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "testToken",
+        "outputs": [
+            {
+                "internalType": "contract TestToken",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
