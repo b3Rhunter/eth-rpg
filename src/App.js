@@ -32,9 +32,11 @@ function App() {
   const [questMonster, setQuestMonster] = useState([]);
 
   const [showQuest, setShowQuests] = useState(false);
-  const [createQuestModal, setCreateQuestModal] = useState(false)
+  const [createQuestModal, setCreateQuestModal] = useState(false);
 
-  const contractAddress = "0x25EA38338c6cB5aD2Fbe92980abff3d19bD239aC";
+  const [pestControl, setPestControl] = useState(false);
+
+  const contractAddress = "0x4b17aC4E09322Df3dB03f95bBE416ecef4b65c93";
 
   const connect = async () => {
     try {
@@ -101,6 +103,7 @@ function App() {
       setCharacterStrg(character.strength.toString());
       setCharacterDef(character.defense.toString())
     } catch (error) {
+      alert(error.message)
       console.log(error.message)
     }
   }
@@ -114,7 +117,9 @@ function App() {
         const newQuest = await contract.quests(contract.quests.length - 1);
         console.log(newQuest);
       }
+      alert('Quest Created!')
     } catch (error) {
+      alert(error.message)
       console.log(error.message);
     }
   };
@@ -122,29 +127,32 @@ function App() {
 
 
   async function startQuest(questIndex) {
-    const tx = await contract.startQuest(questIndex);
-    const receipt = await tx.wait();
-    console.log(receipt)
-    const character = await contract.characters(provider.getSigner().getAddress());
-    console.log('Level: ' + character.level.toString())
-    console.log('Health: ' + character.health.toString())
-    console.log('Defense: ' + character.defense.toString())
-    console.log('Exp: ' + character.experience.toString())
-    console.log('Strength: ' + character.strength.toString())
-    if (character.health.toString() === "0") {
-      setCharacterLevel("0");
-      setCharacterHealth("DEAD!");
-      setCharacterExp("0");
-      setCharacterStrg("0");
-      setCharacterDef("0")
-    } else {
-      setCharacterLevel(character.level.toString());
-      setCharacterHealth(character.health.toString());
-      setCharacterExp(character.experience.toString());
-      setCharacterStrg(character.strength.toString());
-      setCharacterDef(character.defense.toString())
+    try {
+      const tx = await contract.startQuest(questIndex);
+      const receipt = await tx.wait();
+      console.log(receipt)
+      const character = await contract.characters(provider.getSigner().getAddress());
+      console.log('Level: ' + character.level.toString())
+      console.log('Health: ' + character.health.toString())
+      console.log('Defense: ' + character.defense.toString())
+      console.log('Exp: ' + character.experience.toString())
+      console.log('Strength: ' + character.strength.toString())
+      if (character.health.toString() === "0") {
+        setCharacterLevel("0");
+        setCharacterHealth("DEAD!");
+        setCharacterExp("0");
+        setCharacterStrg("0");
+        setCharacterDef("0")
+      } else {
+        setCharacterLevel(character.level.toString());
+        setCharacterHealth(character.health.toString());
+        setCharacterExp(character.experience.toString());
+        setCharacterStrg(character.strength.toString());
+        setCharacterDef(character.defense.toString())
+      }
+    } catch (error) {
+      console.log(error.message)
     }
-
   }
 
   async function getQuests() {
@@ -161,12 +169,10 @@ function App() {
         questRewards.push(tx[i][2].toString());
         questMonsters.push(tx[i][3].toString());
       }
-
       setQuestName(questNames);
       setQuestDiff(questDifficulties);
       setQuestReward(questRewards);
       setQuestMonster(questMonsters);
-
       console.log(tx);
     } catch (error) {
       console.log(error.message);
@@ -174,14 +180,18 @@ function App() {
   }
 
   async function buryCharacter() {
-    const tx = await contract.bury();
-    const receipt = await tx.wait();
-    console.log(receipt)
-    setCharacterLevel("0");
-    setCharacterHealth("Buried!");
-    setCharacterExp("0");
-    setCharacterStrg("0");
-    setCharacterDef("0")
+    try {
+      const tx = await contract.bury();
+      const receipt = await tx.wait();
+      console.log(receipt)
+      setCharacterLevel("0");
+      setCharacterHealth("Buried!");
+      setCharacterExp("0");
+      setCharacterStrg("0");
+      setCharacterDef("0")
+    } catch (error) {
+      alert(error.message)
+    }
   }
 
   const displayQuests = async () => {
@@ -196,6 +206,16 @@ function App() {
     setShowQuests(true)
   }
 
+  const healthPotion = async () => {
+    try {
+      const tx = await contract.healthPotion();
+      const receipt = await tx.wait();
+      console.log(receipt)
+    } catch (error) {
+      alert(error.message)
+    }
+  }
+
   const closeQuests = async () => {
     setShowQuests(false)
   }
@@ -208,6 +228,14 @@ function App() {
     setCreateQuestModal(false)
   }
 
+  function openQuest() {
+    setPestControl(true)
+  }
+
+  function closeQuest() {
+    setPestControl(false)
+  }
+
 
   const disconnect = async () => {
     setConnected(false)
@@ -217,23 +245,26 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>ETH-RPG</h1>
-        <h3 style={{ position: "fixed", top: "0px", left: "24px" }}>{name}</h3>
+        <h1 style={{position: "fixed", top: "0px"}}>ETH-RPG</h1>
+        <h3 style={{ position: "fixed", top: "0px", left: "24px", fontSize: "24px", fontFamily: "monospace" }}>{name}</h3>
 
         {!connected && (
-          <button style={{ position: "fixed", top: "10px", right: "24px" }} onClick={connect}>connect</button>
+          <button style={{ position: "fixed", top: "10px", right: "24px", fontSize: "18px", fontFamily: "monospace" }} onClick={connect}>
+            sign in
+          </button>
         )}
 
         {connected && (
           <>
-            <button style={{ position: "fixed", top: "10px", right: "24px" }} onClick={disconnect}>
-              disconnect
+            <button style={{ position: "fixed", top: "10px", right: "24px", fontSize: "18px", fontFamily: "monospace" }} onClick={disconnect}>
+              sign out
             </button>
+
+            <button style={{ position: "fixed", bottom: "24px", right: "24px", fontSize: "18px", fontFamily: "monospace" }} onClick={healthPotion}>Heal</button>
 
             {showQuest && (
               <div className='questList hideScroll'>
                 <button className='questListBtn' onClick={closeQuests}>X</button>
-                <h4>Quests</h4>
                 {questName.length > 0 ? (
                   questName.map((name, i) => (
                     <div key={name}>
@@ -241,8 +272,10 @@ function App() {
                         <h5>{name}</h5>
                         <p>Difficulty: {questDiff[i]}</p>
                         <p>Reward: {questReward[i]}</p>
-                        <p>Monster: {questMonster[i]}</p>
                         <div className='startBtn' onClick={() => startQuest(i)}>Start Quest</div>
+                        {!pestControl && (
+                          <button style={{fontFamily: "monospace", fontSize: "14px", position: "relative", top: "0px"}} onClick={openQuest}>show quest</button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -257,29 +290,29 @@ function App() {
                 <div className='createQuest'>
                   <div className='createQuestContainer'>
                     <div>
-                      <label htmlFor="newQuestName">New Quest Name:</label>
+                      <label htmlFor="newQuestName">Quest Name:</label>
                       <br />
                       <input type="text" id="newQuestName" value={newQuestName} onChange={(e) => setNewQuestName(e.target.value)} />
                     </div>
                     <br />
                     <div>
-                      <label htmlFor="newQuestDifficulty">New Quest Difficulty:</label>
+                      <label htmlFor="newQuestDifficulty">Difficulty:</label>
                       <br />
                       <input type="number" id="newQuestDifficulty" value={newQuestDifficulty} onChange={(e) => setNewQuestDifficulty(e.target.value)} />
                     </div>
                     <br />
                     <div>
-                      <label htmlFor="newQuestReward">New Quest Reward:</label>
+                      <label htmlFor="newQuestReward">Reward:</label>
                       <br />
                       <input type="number" id="newQuestReward" value={newQuestReward} onChange={(e) => setNewQuestReward(e.target.value)} />
                     </div>
                     <br />
                     <div>
-                      <label htmlFor="newQuestMonsterLevel">New Quest Monster Level:</label>
+                      <label htmlFor="newQuestMonsterLevel">Monster Level:</label>
                       <br />
                       <input type="number" id="newQuestMonsterLevel" value={newQuestMonsterLevel} onChange={(e) => setNewQuestMonsterLevel(e.target.value)} />
                     </div>
-                    <button className='createQuestsBtn' onClick={addQuest}>Add Quest</button>
+                    <button className='createQuestsBtn' onClick={addQuest}>Create Quest</button>
                     <button className='closeCreateQuest' onClick={closeCreateQuest}>X</button>
                   </div>
                 </div>
@@ -312,6 +345,42 @@ function App() {
                 <button className='getQuests' onClick={displayCreateQuest}>Create Quest</button>
               </div>
             </div>
+
+
+
+            {pestControl && (
+            <div className='pestControl hideScroll' onClick={closeQuest}>
+            <h2>Pest Control</h2>
+            <p>
+            The town of Alderstone had been plagued by a rodent infestation for weeks. The rats were everywhere, scurrying through the streets, gnawing on food stores, and even attacking livestock. The townspeople had tried everything to get rid of them, but nothing seemed to work. Desperate for a solution, they turned to a group of adventurers passing through town.
+            </p>
+            <p>
+            The adventurers, a ragtag group consisting of a dwarf fighter, a human wizard, an elf rogue, and a half-orc barbarian, agreed to take on the quest. The town's mayor promised them a generous reward if they could clear out the rats and restore order to Alderstone.
+            </p>
+            <p>
+            The adventurers set out to the source of the infestation, a sprawling network of tunnels beneath the town. Armed with weapons, magic, and torches, they descended into the dark, dank tunnels. The air was thick with the stench of rat droppings and the sound of scurrying feet.
+            </p>
+            <p>
+            The dwarf led the way, his trusty battleaxe at the ready. The rogue followed close behind, her keen eyes scanning the shadows for any sign of movement. The wizard brought up the rear, his hands crackling with arcane energy, while the half-orc bellowed a battle cry and charged ahead.
+            </p>
+            <p>
+            The rats were everywhere, swarming around the adventurers, biting and clawing at their ankles. The party fought back fiercely, hacking and slashing with their weapons and casting spells of fire and lightning. The rats were no match for the adventurers' skill and bravery, and soon the tunnels were littered with rat corpses.
+            </p>
+            <p>
+            But the worst was yet to come. Deeper in the tunnels, the adventurers encountered the rat king, a monstrous creature the size of a horse with a crown of sharp teeth and glowing red eyes. The rat king let out a deafening squeal and charged at the adventurers, its razor-sharp claws slashing through the air.
+            </p>
+            <p>
+            The battle was long and grueling, but the adventurers prevailed. The rat king fell to the ground, its lifeless body twitching in the dim light. With the rat king dead, the rest of the rats fled the tunnels, leaving Alderstone rat-free at last.
+            </p>
+            <p>
+            The townspeople cheered as the adventurers emerged from the tunnels, covered in rat blood and triumphantly hoisting the rat king's head. The mayor presented them with the promised reward, a chest filled with gold and precious gems, and hailed them as heroes of Alderstone.
+            </p>
+            <p>
+            And so the adventurers continued on their journey, richer in both gold and glory, and with the satisfaction of a job well done.
+            </p>
+          </div>
+            )}
+
           </>
         )}
       </header>

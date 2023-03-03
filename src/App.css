@@ -17,6 +17,11 @@ button {
   margin: 14px;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}
+
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
@@ -145,6 +150,7 @@ button {
   padding: 5px 3px;
   border-radius: 7px;
   font-size: 14px;
+  text-decoration: none;
 }
 
 .createQuest label {
@@ -168,4 +174,20 @@ button {
 .createQuestsBtn {
   font-family: monospace;
   font-size: 18px;
+}
+
+.pestControl {
+  font-family: monospace;
+  font-size: 14px;
+  text-align: justify;
+  width: 60%;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid #fff;
+  border-radius: 14px;
+  padding: 14px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  height: 80vh;
+  overflow-y: scroll;
 }
