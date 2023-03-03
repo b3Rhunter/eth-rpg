@@ -37,7 +37,7 @@ function App() {
 
   const [pestControl, setPestControl] = useState(false);
 
-  const contractAddress = "0x7C9795a09c8d915fE07D930d694bcC1Eff45ac8C";
+  const contractAddress = "0x66B26b514F7FDb89512306511B3aB3a3Ca501462";
   const erc20Address = "0xC52249b679517876Fa8c77d1659E5F730c6E453d"
 
   const connect = async () => {
@@ -78,7 +78,7 @@ function App() {
       }
       setCharacterName(character.name.toString())
       setCharacterLevel(character.level.toString());
-      setCharacterExp(character.experience.toString());
+      setCharacterExp(parseFloat(ethers.utils.formatEther(character.experience.toString())).toFixed(0));
       setCharacterStrg(character.strength.toString());
       setCharacterDef(character.defense.toString())
       console.log(character.name.toString())
@@ -149,7 +149,7 @@ function App() {
       } else {
         setCharacterLevel(character.level.toString());
         setCharacterHealth(character.health.toString());
-        setCharacterExp(character.experience.toString());
+        setCharacterExp(parseFloat(ethers.utils.formatEther(character.experience.toString())).toFixed(0));
         setCharacterStrg(character.strength.toString());
         setCharacterDef(character.defense.toString());
       }
@@ -186,7 +186,7 @@ function App() {
     try {
       const user = signer.getAddress()
       const address = erc20Address;
-      const rpgAddress = "0x7C9795a09c8d915fE07D930d694bcC1Eff45ac8C";
+      const rpgAddress = "0x66B26b514F7FDb89512306511B3aB3a3Ca501462";
       const erc20Contract = new ethers.Contract(address, erc20, signer);
       const balance = await erc20Contract.balanceOf(user);
       const approve = await erc20Contract.approve(rpgAddress, balance);
