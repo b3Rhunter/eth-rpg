@@ -38,7 +38,7 @@ function App() {
 
   const [pestControl, setPestControl] = useState(false);
 
-  const contractAddress = "0x66B26b514F7FDb89512306511B3aB3a3Ca501462";
+  const contractAddress = "0xA12FDb0eA35db4B4451066a332b4B3fcA5818546";
   const erc20Address = "0xC52249b679517876Fa8c77d1659E5F730c6E453d"
 
   const connect = async () => {
@@ -109,7 +109,8 @@ function App() {
       setCharacterHealth(character.health.toString());
       setCharacterExp(character.experience.toString());
       setCharacterStrg(character.strength.toString());
-      setCharacterDef(character.defense.toString())
+      setCharacterDef(character.defense.toString());
+      alert("Hero Created!")
     } catch (error) {
       alert(error.message)
       console.log(error.message)
@@ -151,13 +152,15 @@ function App() {
         setCharacterHealth("DEAD!");
         setCharacterExp("0");
         setCharacterStrg("0");
-        setCharacterDef("0")
+        setCharacterDef("0");
+        alert("You're Dead!")
       } else {
         setCharacterLevel(character.level.toString());
         setCharacterHealth(character.health.toString());
         setCharacterExp(parseFloat(ethers.utils.formatEther(character.experience.toString())).toFixed(0));
         setCharacterStrg(character.strength.toString());
         setCharacterDef(character.defense.toString());
+        alert("Mission Accomplished!")
       }
     } catch (error) {
       console.log(error.message)
@@ -191,11 +194,9 @@ function App() {
   async function buryCharacter() {
     try {
       const user = signer.getAddress()
-      const address = erc20Address;
-      const rpgAddress = "0x66B26b514F7FDb89512306511B3aB3a3Ca501462";
-      const erc20Contract = new ethers.Contract(address, erc20, signer);
+      const erc20Contract = new ethers.Contract(erc20Address, erc20, signer);
       const balance = await erc20Contract.balanceOf(user);
-      const approve = await erc20Contract.approve(rpgAddress, balance);
+      const approve = await erc20Contract.approve(contractAddress, balance);
       const tx1 = await approve.wait()
       console.log(tx1)
       const tx = await contract.bury();
@@ -205,7 +206,8 @@ function App() {
       setCharacterHealth("Buried!");
       setCharacterExp("0");
       setCharacterStrg("0");
-      setCharacterDef("0")
+      setCharacterDef("0");
+      alert("Hero buried!")
     } catch (error) {
       alert(error.message)
     }
