@@ -3,6 +3,7 @@ import './App.css';
 import { ethers } from "ethers";
 import abi from './abi.json';
 import erc20 from './erc20abi.json';
+import logo from './imgs/etherquest_logo.png';
 
 function App() {
 
@@ -261,7 +262,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 style={{position: "fixed", top: "0px"}}>ETH-RPG</h1>
+        <img style={{width: "250px", position: "fixed", top: "14px"}} src={logo} alt="EtherQuest"/>
         <h3 style={{ position: "fixed", top: "0px", left: "24px", fontSize: "24px", fontFamily: "monospace" }}>{name}</h3>
 
         {!connected && (
